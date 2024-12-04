@@ -1,0 +1,15 @@
+{
+    "name": "pc/php-api-raw",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "PC",
+            "email": "itmentorstva@gmail.com"
+        }
+    ],
+    "require": {}
+}
