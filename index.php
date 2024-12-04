@@ -22,14 +22,19 @@ if(!array_key_exists(key: $uri, array: $api)) {
 
 try {
 
-    $controllerClass = new ReflectionClass(objectOrClass: $api[$uri]);
+    $controllerReflectionClass = new ReflectionClass(objectOrClass: $api[$uri]);
 
-    foreach ($controllerClass->getMethods() as $method) {
+    foreach ($controllerReflectionClass->getMethods() as $method) {
         foreach ($method->getAttributes(Router::class) as $attribute) {
 
             // /user/getAll => $route[3] = "getAll"
             if($attribute->getArguments()[0] === $route[3]) {
-                dd($controllerClass->getName(), $method);
+                
+                $controller = new $api[$uri];
+
+                // User.php -> index()
+                $apiResponse = $controller->{$method->getName()}();
+                dd($apiResponse);
             }
         }
     }
