@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\User;
+use App\Response\ApiResponse;
 use App\Routes\Router;
 
 function dd(...$values)
@@ -14,10 +15,25 @@ require_once "config/routes.php";
 
 $route = explode(separator: '/', string: $_SERVER['REQUEST_URI']);
 
-$uri = $route[2] ?? null;
+$apiUrl = $route[2] ?? null;
+$uri = $route[3] ?? null;
+
+// localhost/api
+
+if($apiUrl !== "api") {
+
+    ApiResponse::jsonResponse(data: [
+        'message' => 'Failed loading page.'
+    ], responseCode: 400);
+    return;
+}
+
 
 if(!array_key_exists(key: $uri, array: $api)) {
-    die("Unkown URL... Posle bacimo 404 (ziveo Gubka)");
+    ApiResponse::jsonResponse(data: [
+        'message' => 'Unknown required resources.'
+    ], responseCode: 400);
+    return;
 }
 
 try {
