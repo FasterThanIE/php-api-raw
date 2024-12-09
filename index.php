@@ -1,6 +1,5 @@
 <?php
 
-use App\Controllers\User;
 use App\Response\ApiResponse;
 use App\Routes\Router;
 
@@ -12,6 +11,9 @@ function dd(...$values)
 
 require_once "vendor/autoload.php";
 require_once "config/routes.php";
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 $route = explode(separator: '/', string: $_SERVER['REQUEST_URI']);
 
@@ -48,8 +50,22 @@ try {
                 
                 $controller = new $api[$uri];
 
+               $params = [];
+
+                // Koje params trebam da prosledim funkciji?
+                foreach ($method->getParameters() as $param) {
+
+                    $paramType = $param->getType()->getName();
+
+                    $params[] = str_starts_with(haystack: $paramType, needle: 'App\\') ?
+                        new $paramType : ''; // get data from POST or GET
+
+                }
+
                 // User.php -> index()
-                $apiResponse = $controller->{$method->getName()}();
+                $apiResponse = count($params) >= 1 ?
+                    $controller->{$method->getName()}(...$params) :
+                    $controller->{$method->getName()}();
 
                 ApiResponse::jsonResponse(data: [
                     'message' => $apiResponse,
