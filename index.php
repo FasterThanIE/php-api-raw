@@ -44,13 +44,16 @@ try {
         foreach ($method->getAttributes(name: Router::class) as $attribute) {
 
             // /user/getAll => $route[3] = "getAll"
-            if($attribute->getArguments()[0] === $route[3]) {
+            if($attribute->getArguments()[0] === $route[4]) {
                 
                 $controller = new $api[$uri];
 
                 // User.php -> index()
                 $apiResponse = $controller->{$method->getName()}();
-                dd($apiResponse);
+
+                ApiResponse::jsonResponse(data: [
+                    'message' => $apiResponse,
+                ]);
             }
         }
     }

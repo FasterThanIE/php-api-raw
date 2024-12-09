@@ -9,8 +9,8 @@ class User
     #[Router('getAll')]
     public function index()
     {
-        return json_encode([
-            'success' => 'Of course'
-        ]);
+        return [
+            'success' => 'test'
+        ];
     }
 }
