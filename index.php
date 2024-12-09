@@ -25,7 +25,7 @@ try {
     $controllerReflectionClass = new ReflectionClass(objectOrClass: $api[$uri]);
 
     foreach ($controllerReflectionClass->getMethods() as $method) {
-        foreach ($method->getAttributes(Router::class) as $attribute) {
+        foreach ($method->getAttributes(name: Router::class) as $attribute) {
 
             // /user/getAll => $route[3] = "getAll"
             if($attribute->getArguments()[0] === $route[3]) {
